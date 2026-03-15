@@ -1,0 +1,134 @@
+.wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #0b0b1a;
+  overflow: hidden;
+}
+
+/* Screen shake animation for wrong answers */
+.shake {
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+  20%, 40%, 60%, 80% { transform: translateX(8px); }
+}
+
+.gameInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.hud {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  z-index: 10;
+  pointer-events: none;
+  background: linear-gradient(#0b0b1af0, transparent);
+  gap: 8px;
+}
+
+.hudBox {
+  background: rgba(255,255,255,0.1);
+  border: 1.5px solid rgba(255,255,255,0.14);
+  border-radius: 12px;
+  padding: 5px 10px;
+  text-align: center;
+  min-width: auto;
+}
+
+.hudLabel {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+}
+
+.hudVal {
+  font-size: 16px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.levelName {
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.6);
+}
+
+.taskBanner {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 10;
+  padding: 8px 12px 14px;
+  background: linear-gradient(transparent, #0b0b1acc, #0b0b1af5);
+  pointer-events: none;
+}
+
+.taskCard {
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(255,255,255,0.16);
+  border-radius: 14px;
+  padding: 10px 14px;
+}
+
+.taskBig {
+  font-size: 17px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.taskHint {
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+.floatyLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* Floaty text - uses plain class name from JS */
+.floaty {
+  position: absolute;
+  pointer-events: none;
+  font-size: 16px;
+  font-weight: 800;
+  font-family: 'Nunito', sans-serif;
+  white-space: nowrap;
+  animation: fup 0.8s ease forwards;
+}
+
+@keyframes fup {
+  0%   { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-50px); }
+}

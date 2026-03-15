@@ -1,0 +1,195 @@
+.wrap {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0b0b1a 0%, #1a1a2e 100%);
+  padding: 0;
+}
+
+.header {
+  text-align: center;
+  padding: 40px 20px 30px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.3));
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.logoIcon {
+  font-size: 48px;
+}
+
+.logoText {
+  font-size: 36px;
+  font-weight: 900;
+  color: #fff;
+  margin: 0;
+}
+
+.tagline {
+  font-size: 16px;
+  color: rgba(255,255,255,0.6);
+  margin: 0;
+}
+
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.7);
+  text-align: center;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.gamesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  padding: 10px;
+}
+
+.gameCard {
+  background: rgba(255,255,255,0.05);
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.gameCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+
+.gameCard.locked {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.gameCard.locked:hover {
+  transform: none;
+}
+
+.cardHeader {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gameIcon {
+  font-size: 56px;
+}
+
+.lockedBadge {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.1);
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.cardBody {
+  padding: 20px 24px;
+}
+
+.gameTitle {
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 10px;
+}
+
+.gameDesc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+
+.gameMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metaLabel {
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.metaValue {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+}
+
+.playBtn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 0 0 18px 18px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  cursor: pointer;
+  transition: filter 0.2s;
+  font-family: 'Nunito', sans-serif;
+}
+
+.playBtn:hover {
+  filter: brightness(1.1);
+}
+
+.playBtn:active {
+  transform: scale(0.98);
+}
+
+.footer {
+  text-align: center;
+  padding: 30px 20px;
+  color: rgba(255,255,255,0.4);
+  font-size: 14px;
+}
+
+.footer p {
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .logoText {
+    font-size: 28px;
+  }
+  
+  .logoIcon {
+    font-size: 36px;
+  }
+  
+  .gamesGrid {
+    grid-template-columns: 1fr;
+  }
+}

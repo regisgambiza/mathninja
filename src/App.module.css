@@ -1,0 +1,45 @@
+.shell {
+  min-height: 100vh;
+  background: #0b0b1a;
+}
+
+.gameContainer {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #050510;
+}
+
+.backBtn {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 1000;
+  padding: 10px 16px;
+  background: rgba(255,255,255,0.1);
+  border: 1.5px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  font-family: 'Nunito', sans-serif;
+}
+
+.backBtn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.backBtn:active {
+  transform: scale(0.95);
+}
+
+.gameFrame {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0 0;
+}
