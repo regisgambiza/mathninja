@@ -142,8 +142,11 @@ export default function GameScreen({ mode, initialTask, onGameOver }) {
         st.level = currentLevel.level;
         st.spawnRate = currentLevel.spawnRate;
         st.speedMult = currentLevel.speedMult;
+        // Generate new task with new number for this level
         st.task = makeTask(mode);
-        st.balls = [];
+        // Clear existing balls and spawn new ones with the new task
+        st.balls.forEach(b => { b.alive = false; b.alpha = 0; });
+        // Update the task display immediately
         if (taskBigEl.current) taskBigEl.current.textContent = st.task.bigtext;
         if (taskHintEl.current) taskHintEl.current.textContent = st.task.hint;
         updateLevelDOM(st.level);

@@ -1,5 +1,5 @@
 .wrap {
-  position: absolute;    /* fill the phone shell */
+  position: absolute;
   inset: 0;
   background: #0b0b1a;
   overflow: hidden;
@@ -21,32 +21,34 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 12px;
+  padding: 8px 10px;
   z-index: 10;
   pointer-events: none;
   background: linear-gradient(#0b0b1af0, transparent);
-  gap: 8px;
+  gap: 6px;
 }
 
 .hudBox {
   background: rgba(255,255,255,0.1);
   border: 1.5px solid rgba(255,255,255,0.14);
-  border-radius: 12px;
-  padding: 5px 12px;
+  border-radius: 10px;
+  padding: 4px 8px;
   text-align: center;
-  min-width: 64px;
+  min-width: auto;
+  flex: 1;
+  max-width: 80px;
 }
 
 .hudLabel {
-  font-size: 10px;
+  font-size: 8px;
   font-weight: 800;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   color: rgba(255,255,255,0.45);
   text-transform: uppercase;
 }
 
 .hudVal {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 900;
   color: #fff;
   line-height: 1.2;
@@ -56,7 +58,7 @@
   position: absolute;
   bottom: 0; left: 0; right: 0;
   z-index: 10;
-  padding: 8px 12px 14px;
+  padding: 8px 10px 12px;
   background: linear-gradient(transparent, #0b0b1acc, #0b0b1af5);
   pointer-events: none;
 }
@@ -64,21 +66,21 @@
 .taskCard {
   background: rgba(255,255,255,0.08);
   border: 1.5px solid rgba(255,255,255,0.16);
-  border-radius: 14px;
-  padding: 10px 14px;
+  border-radius: 12px;
+  padding: 8px 12px;
 }
 
 .taskBig {
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 900;
   color: #fff;
   line-height: 1.3;
 }
 
 .taskHint {
-  font-size: 12px;
+  font-size: 11px;
   color: rgba(255,255,255,0.45);
-  margin-top: 3px;
+  margin-top: 2px;
   line-height: 1.4;
 }
 
@@ -92,7 +94,7 @@
 :global(.floaty) {
   position: absolute;
   pointer-events: none;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 800;
   font-family: 'Nunito', sans-serif;
   white-space: nowrap;
@@ -102,4 +104,47 @@
 @keyframes fup {
   0%   { opacity: 1; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(-50px); }
+}
+
+/* Desktop: larger HUD elements */
+@media (min-width: 480px) {
+  .hud {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .hudBox {
+    padding: 5px 12px;
+    min-width: 64px;
+    max-width: none;
+    flex: none;
+  }
+
+  .hudLabel {
+    font-size: 10px;
+  }
+
+  .hudVal {
+    font-size: 20px;
+  }
+
+  .taskBanner {
+    padding: 8px 12px 14px;
+  }
+
+  .taskCard {
+    padding: 10px 14px;
+  }
+
+  .taskBig {
+    font-size: 17px;
+  }
+
+  .taskHint {
+    font-size: 12px;
+  }
+
+  :global(.floaty) {
+    font-size: 16px;
+  }
 }
