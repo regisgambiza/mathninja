@@ -10,7 +10,7 @@ const msgs = [
 ];
 
 export default function ResultsScreen({ mode, results, onReplay, onHome }) {
-  const { score, correctTaps, wrongTaps, bestCombo, level } = results;
+  const { score, correctTaps, wrongTaps, bestCombo } = results;
   const msgIdx = Math.min(Math.floor(score / 80), msgs.length - 1);
 
   return (
@@ -23,7 +23,6 @@ export default function ResultsScreen({ mode, results, onReplay, onHome }) {
       <div className={s.statsBox}>
         {[
           ['Topic', mode.charAt(0).toUpperCase() + mode.slice(1)],
-          ['Level reached', 'Lv ' + (level || 1)],
           ['Correct taps', correctTaps],
           ['Wrong taps', wrongTaps],
           ['Best combo', 'x' + bestCombo],

@@ -1,26 +1,8 @@
 .wrap {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  position: absolute;    /* fill the phone shell */
+  inset: 0;
   background: #0b0b1a;
   overflow: hidden;
-}
-
-/* Screen shake animation for wrong answers */
-.shake {
-  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
-  20%, 40%, 60%, 80% { transform: translateX(8px); }
-}
-
-.gameInner {
-  position: relative;
-  width: 100%;
-  height: 100%;
 }
 
 .canvas {
@@ -50,13 +32,13 @@
   background: rgba(255,255,255,0.1);
   border: 1.5px solid rgba(255,255,255,0.14);
   border-radius: 12px;
-  padding: 5px 10px;
+  padding: 5px 12px;
   text-align: center;
-  min-width: auto;
+  min-width: 64px;
 }
 
 .hudLabel {
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.5px;
   color: rgba(255,255,255,0.45);
@@ -64,20 +46,10 @@
 }
 
 .hudVal {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 900;
   color: #fff;
   line-height: 1.2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-.levelName {
-  font-size: 10px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.6);
 }
 
 .taskBanner {
@@ -117,8 +89,7 @@
   z-index: 20;
 }
 
-/* Floaty text - uses plain class name from JS */
-.floaty {
+:global(.floaty) {
   position: absolute;
   pointer-events: none;
   font-size: 16px;

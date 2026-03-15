@@ -1,38 +1,60 @@
-// Main Portal App - Routes to different games
 import React, { useState, useCallback } from 'react';
-import LandingPage from './LandingPage';
-import MathNinjaApp from './MathNinjaApp';
+import HomeScreen from './HomeScreen';
+import InstructionScreen from './InstructionScreen';
+import Countdown from './Countdown';
+import GameScreen from './GameScreen';
+import ResultsScreen from './ResultsScreen';
+import { makeTask } from './mathHelpers';
 import s from './App.module.css';
 
 export default function App() {
-  const [currentGame, setCurrentGame] = useState(null);
+  const [screen, setScreen] = useState('home');
+  const [mode, setMode] = useState('factors');
+  const [task, setTask] = useState(null);
+  const [results, setResults] = useState(null);
+  const [gameKey, setGameKey] = useState(0);
 
-  const handleChooseGame = useCallback((gameId) => {
-    if (gameId === 'mathninja') {
-      setCurrentGame('mathninja');
-    }
+  const handleChooseMode = useCallback((m) => {
+    setMode(m);
+    setTask(makeTask(m));
+    setScreen('instructions');
   }, []);
 
-  const handleBackToPortal = useCallback(() => {
-    setCurrentGame(null);
+  const handleStartCountdown = useCallback(() => setScreen('countdown'), []);
+  const handleCountdownDone  = useCallback(() => setScreen('game'), []);
+
+  const handleGameOver = useCallback((r) => {
+    setResults(r);
+    setScreen('results');
   }, []);
+
+  const handleReplay = useCallback(() => {
+    setTask(makeTask(mode));
+    setGameKey(k => k + 1);
+    setScreen('countdown');
+  }, [mode]);
+
+  const handleHome = useCallback(() => setScreen('home'), []);
 
   return (
     <div className={s.shell}>
-      {currentGame === null && (
-        <LandingPage onChooseGame={handleChooseGame} />
-      )}
-      
-      {currentGame === 'mathninja' && (
-        <div className={s.gameContainer}>
-          <button className={s.backBtn} onClick={handleBackToPortal}>
-            ← Back to Portal
-          </button>
-          <div className={s.gameFrame}>
-            <MathNinjaApp />
+      <div className={s.phone}>
+        {screen === 'home' && (
+          <div className={s.scrollable}><HomeScreen onChoose={handleChooseMode} /></div>
+        )}
+        {screen === 'instructions' && (
+          <div className={s.scrollable}><InstructionScreen mode={mode} task={task} onStart={handleStartCountdown} /></div>
+        )}
+        {screen === 'countdown' && <Countdown onDone={handleCountdownDone} />}
+        {screen === 'game' && task && (
+          <GameScreen key={gameKey} mode={mode} initialTask={task} onGameOver={handleGameOver} />
+        )}
+        {screen === 'results' && results && (
+          <div className={s.scrollable}>
+            <ResultsScreen mode={mode} results={results} onReplay={handleReplay} onHome={handleHome} />
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
