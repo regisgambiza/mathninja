@@ -3,6 +3,22 @@ import s from './GameScreen.module.css';
 import { pick, rand, makeTask } from './mathHelpers';
 
 const BALL_COLS = ['#7C6FCD', '#5B8FD4', '#6DAACC', '#9B8DC4', '#7EA8B8', '#c47c8a', '#7dbb8f'];
+// Gentle, gradual level ramp: small bumps in speed and spawn rate each tier
+// Very gentle 12-level ramp (minimal deltas per level)
+const LEVELS = [
+  { level: 1, speedMult: 0.35, spawnRate: 240, threshold: 0 },
+  { level: 2, speedMult: 0.40, spawnRate: 232, threshold: 100 },
+  { level: 3, speedMult: 0.45, spawnRate: 224, threshold: 220 },
+  { level: 4, speedMult: 0.50, spawnRate: 216, threshold: 360 },
+  { level: 5, speedMult: 0.55, spawnRate: 208, threshold: 520 },
+  { level: 6, speedMult: 0.60, spawnRate: 200, threshold: 700 },
+  { level: 7, speedMult: 0.66, spawnRate: 192, threshold: 900 },
+  { level: 8, speedMult: 0.72, spawnRate: 184, threshold: 1120 },
+  { level: 9, speedMult: 0.78, spawnRate: 176, threshold: 1360 },
+  { level: 10, speedMult: 0.84, spawnRate: 168, threshold: 1620 },
+  { level: 11, speedMult: 0.90, spawnRate: 160, threshold: 1900 },
+  { level: 12, speedMult: 0.98, spawnRate: 150, threshold: 2200 },
+];
 
 export default function GameScreen({ mode, initialTask, onGameOver }) {
   const canvasRef = useRef(null);
@@ -12,6 +28,7 @@ export default function GameScreen({ mode, initialTask, onGameOver }) {
   const scoreEl = useRef(null);
   const livesEl = useRef(null);
   const comboEl = useRef(null);
+  const levelEl = useRef(null);
   const taskBigEl = useRef(null);
   const taskHintEl = useRef(null);
   const floatyContainer = useRef(null);
@@ -32,6 +49,10 @@ export default function GameScreen({ mode, initialTask, onGameOver }) {
     setTimeout(() => el.remove(), 800);
   }, []);
 
+  const updateLevelDOM = useCallback((lvl) => {
+    if (levelEl.current) levelEl.current.textContent = `Lv ${lvl}`;
+  }, []);
+
   useEffect(() => {
     if (!initialTask) return;
     const canvas = canvasRef.current;
@@ -42,15 +63,24 @@ export default function GameScreen({ mode, initialTask, onGameOver }) {
       score: 0, lives: 3, combo: 1, bestCombo: 1, comboTick: 0,
       correctTaps: 0, wrongTaps: 0,
       balls: [], particles: [],
-      spawnTick: 0, spawnRate: 150, tick: 0,
+      spawnTick: 0, spawnRate: LEVELS[0].spawnRate, tick: 0,
       task: initialTask, running: false,
+      level: 1, speedMult: LEVELS[0].speedMult,
     };
     stateRef.current = st;
 
     if (taskBigEl.current) taskBigEl.current.textContent = initialTask.bigtext;
     if (taskHintEl.current) taskHintEl.current.textContent = initialTask.hint;
+    updateLevelDOM(1);
 
     const ctx = canvas.getContext('2d');
+
+    const getLevelForScore = (score) => {
+      for (let i = LEVELS.length - 1; i >= 0; i--) {
+        if (score >= LEVELS[i].threshold) return LEVELS[i];
+      }
+      return LEVELS[0];
+    };
 
     function resize() {
       const rect = app.getBoundingClientRect();
@@ -74,7 +104,7 @@ export default function GameScreen({ mode, initialTask, onGameOver }) {
       const num = isTarget ? pick(targets) : pick(nonTargets);
       const r = rand(26, 38);
       const x = r + 8 + Math.random() * (canvas.width - r * 2 - 16);
-      const speed = 0.7 + Math.random() * 0.6 + st.tick / 5000;
+      const speed = (0.7 + Math.random() * 0.6 + st.tick / 5000) * st.speedMult;
       const col = pick(BALL_COLS);
       st.balls.push({ x, y: -r - 10, r, num, isTarget: task.isTarget(num), col, speed, alive: true, alpha: 1, vx: (Math.random() - 0.5) * 0.5 });
     }
@@ -106,12 +136,25 @@ export default function GameScreen({ mode, initialTask, onGameOver }) {
       for (let x = 0; x < canvas.width; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
       for (let y = 0; y < canvas.height; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
 
+      // Level check: increase speed/spawn rate and swap question when threshold crossed
+      const currentLevel = getLevelForScore(st.score);
+      if (currentLevel.level !== st.level) {
+        st.level = currentLevel.level;
+        st.spawnRate = currentLevel.spawnRate;
+        st.speedMult = currentLevel.speedMult;
+        st.task = makeTask(mode);
+        st.balls = [];
+        if (taskBigEl.current) taskBigEl.current.textContent = st.task.bigtext;
+        if (taskHintEl.current) taskHintEl.current.textContent = st.task.hint;
+        updateLevelDOM(st.level);
+        addFloaty(canvas.width / 2, canvas.height / 2, `Lv ${st.level}!`, '#ffff55');
+      }
+
       st.spawnTick++;
       if (st.spawnTick >= st.spawnRate) {
         st.spawnTick = 0;
         spawnBall();
         if (st.tick > 500 && Math.random() < 0.28) spawnBall();
-        st.spawnRate = Math.max(55, 150 - st.tick / 90);
       }
 
       if (mode === 'mixed' && st.tick % 720 === 0) {
@@ -160,6 +203,8 @@ export default function GameScreen({ mode, initialTask, onGameOver }) {
       let r2 = requestAnimationFrame(() => {
         resize();
         st.running = true;
+        updateLevelDOM(st.level);
+        addFloaty(canvas.width / 2, canvas.height / 2, `Lv ${st.level}!`, '#ffff55');
         spawnBall();
         loop();
       });
@@ -230,14 +275,17 @@ export default function GameScreen({ mode, initialTask, onGameOver }) {
           <div className={s.hudLabel}>Score</div>
           <div className={s.hudVal} ref={scoreEl}>0</div>
         </div>
+        <div className={s.hudBox}>
+          <div className={s.hudLabel}>Level</div>
+          <div className={s.hudVal} ref={levelEl}>Lv 1</div>
+        </div>
         <div className={s.hudBox} ref={livesEl} style={{ fontSize: 18, letterSpacing: 2 }}>❤️❤️❤️</div>
         <div className={s.hudBox}>
           <div className={s.hudLabel}>Combo</div>
           <div className={s.hudVal} ref={comboEl}>x1</div>
         </div>
       </div>
-
-      <div className={s.floatyLayer} ref={floatyContainer} />
+<div className={s.floatyLayer} ref={floatyContainer} />
 
       <div className={s.taskBanner}>
         <div className={s.taskCard}>
